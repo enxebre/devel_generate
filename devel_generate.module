@@ -1,0 +1,91 @@
+<?php
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Language\Language;
+use Drupal\field\Field;
+
+/**
+ * Implements hook_menu().
+ */
+function devel_generate_menu() {
+
+  $items = array();
+
+  $devel_generate_plugins = $devel_generate_manager = \Drupal::service('plugin.manager.develgenerate')->getDefinitions();
+  foreach ($devel_generate_plugins as $id => $plugin) {
+    $label = $plugin['label'];
+    $url = $plugin['url'];
+    $items["admin/config/development/generate/$url"] = array(
+      'title' => "Generate $label",
+      'description' => $plugin['description'],
+      'route_name' => "devel_generate.$id",
+    );
+  }
+
+  return $items;
+}
+
+function devel_generate_permission() {
+
+  $permissions = array();
+
+  $devel_generate_plugins = $devel_generate_manager = \Drupal::service('plugin.manager.develgenerate')->getDefinitions();
+  foreach ($devel_generate_plugins as $id => $plugin) {
+
+    $permission = $plugin['permission'];
+    $permissions[$permission] = array(
+      'title' => t($permission),
+      'description' => t($permission),
+    );
+
+    return $permissions;
+  }
+  return array(
+    'administer my module' => array(
+      'title' => t('Administer my module'),
+      'description' => t('Perform administration tasks for my module.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_node_insert().
+ * Inserts nodes properly based on generation options.
+ *
+ * @param $node
+ *  The base node created on submit. Inspects $node->devel_generate.
+ */
+function devel_generate_node_insert(EntityInterface $node) {
+  if (isset($node->devel_generate)) {
+    $results = $node->devel_generate;
+
+    if (!empty($results['max_comments'])) {
+      // Disable entity statistics for comments created as it tries to insert
+      // them twice.
+      \Drupal::state()->set('comment.maintain_entity_statistics', FALSE);
+      $instances = Field::fieldInfo()->getBundleInstances($node->entityType(), $node->bundle());
+      foreach ($instances as $instance) {
+        $field = $instance->getField();
+        if ($field->getType() == 'comment') {
+          devel_generate_add_comments($node, $field, $results['users'], $results['max_comments'], $results['title_length']);
+        }
+      }
+      \Drupal::state()->set('comment.maintain_entity_statistics', TRUE);
+    }
+
+
+    // Add an url alias. Cannot happen before save because we don't know the nid.
+    if (!empty($results['add_alias'])) {
+      $path = array(
+        'source' => 'node/' . $node->id(),
+        'alias' => 'node-' . $node->id() . '-' . $node->bundle(),
+      );
+      drupal_container()->get('path.crud')->save($path['source'], $path['alias']);
+    }
+
+    // Add node statistics.
+    if (!empty($results['add_statistics']) && module_exists('statistics')) {
+      devel_generate_add_statistics($node);
+    }
+  }
+}
