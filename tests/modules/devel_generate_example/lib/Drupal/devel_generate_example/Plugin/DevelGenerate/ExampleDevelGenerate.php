@@ -14,8 +14,8 @@ use Drupal\devel_generate\DevelGenerateBase;
  *
  * @DevelGenerate(
  *   id = "example",
- *   label = @Translation("Example"),
- *   description = @Translation("Generate a given number of examples. Optionally delete current examples."),
+ *   label = "Example",
+ *   description = "Generate a given number of examples. Optionally delete current examples.",
  *   url = "example",
  *   permission = "administer devel_generate",
  *   settings = {
