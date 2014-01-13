@@ -7,13 +7,34 @@
 
 namespace Drupal\devel_generate\Form;
 
+use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Form\FormBase;
-use Drupal\Core\Form\FormInterface;
 use Drupal\devel_generate\DevelGenerateException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /**
  * Defines a form that allows privileged users to generate entities.
  */
-class DevelGenerateForm extends FormBase implements FormInterface {
+class DevelGenerateForm extends FormBase {
+
+  /**
+   * Constructs a new DevelGenerateForm object.
+   *
+   * @param \Drupal\Component\Plugin\PluginManagerInterface $devel_generate_manager
+   *   The manager to be used for instantiating plugins.
+   */
+  public function __construct(PluginManagerInterface $devel_generate_manager) {
+    $this->DevelGenerateManager = $devel_generate_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('plugin.manager.develgenerate')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -22,15 +43,20 @@ class DevelGenerateForm extends FormBase implements FormInterface {
     return 'devel_generate_form_' . $this->getPluginIdFromRequest();
   }
 
+  /**
+   *
+   */
   protected function getPluginIdFromRequest() {
     $request = $this->getRequest();
     return $request->get('_plugin_id');
   }
 
+  /**
+   * 
+   */
   public function getPluginInstance() {
-    $devel_generate_manager = $this->container()->get('plugin.manager.develgenerate');
     $element_to_generate = $this->getPluginIdFromRequest();
-    $instance = $devel_generate_manager->createInstance($element_to_generate);
+    $instance = $this->DevelGenerateManager->createInstance($element_to_generate, array());
     return $instance;
   }
 
@@ -53,7 +79,6 @@ class DevelGenerateForm extends FormBase implements FormInterface {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, array &$form_state) {
-
     try {
       $values = $form_state['values'];
       $instance = $form_state['instance'];
