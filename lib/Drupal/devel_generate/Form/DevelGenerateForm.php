@@ -44,7 +44,10 @@ class DevelGenerateForm extends FormBase {
   }
 
   /**
-   *
+   * Returns the value of the param _plugin_id 
+   * for the current request.
+   * 
+   * @see \Drupal\devel_generate\Routing\DevelGenerateRouteSubscriber
    */
   protected function getPluginIdFromRequest() {
     $request = $this->getRequest();
@@ -52,11 +55,15 @@ class DevelGenerateForm extends FormBase {
   }
 
   /**
+   * Returns a DevelGenerate plugin instance for a given plugin id.
    * 
+   * @param string $plugin_id
+   * 
+   * @return \Drupal\devel_generate\DevelGenerateBaseInterface
+   *   A DevelGenerate plugin instance.
    */
-  public function getPluginInstance() {
-    $element_to_generate = $this->getPluginIdFromRequest();
-    $instance = $this->DevelGenerateManager->createInstance($element_to_generate, array());
+  public function getPluginInstance($plugin_id) {
+    $instance = $this->DevelGenerateManager->createInstance($plugin_id, array());
     return $instance;
   }
 
@@ -64,7 +71,8 @@ class DevelGenerateForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, array &$form_state) {
-    $instance = $this->getPluginInstance();
+    $plugin_id = $this->getPluginIdFromRequest();
+    $instance = $this->getPluginInstance($plugin_id);
     $form = $instance->settingsForm($form, $form_state);
     $form_state['instance'] = $instance;
     $form['submit'] = array(
