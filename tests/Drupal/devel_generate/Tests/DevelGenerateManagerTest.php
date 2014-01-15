@@ -11,13 +11,14 @@ use Drupal\Core\Language\Language;
  *
  */
 
-//Looping to find drupal root folder.
-$current_dir = dirname(__DIR__);
-while (!file_exists("$current_dir/index.php")) {
-  $current_dir = dirname($current_dir);
-}
-
 if (!defined('DRUPAL_ROOT')) {
+
+  //Looping to find drupal root folder.
+  $current_dir = dirname(__DIR__);
+  while (!file_exists("$current_dir/index.php")) {
+    $current_dir = dirname($current_dir);
+  }
+
   define('DRUPAL_ROOT', $current_dir);
 }
 
