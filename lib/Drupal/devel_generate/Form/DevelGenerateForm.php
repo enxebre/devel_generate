@@ -44,9 +44,9 @@ class DevelGenerateForm extends FormBase {
   }
 
   /**
-   * Returns the value of the param _plugin_id 
+   * Returns the value of the param _plugin_id
    * for the current request.
-   * 
+   *
    * @see \Drupal\devel_generate\Routing\DevelGenerateRouteSubscriber
    */
   protected function getPluginIdFromRequest() {
@@ -56,9 +56,9 @@ class DevelGenerateForm extends FormBase {
 
   /**
    * Returns a DevelGenerate plugin instance for a given plugin id.
-   * 
+   *
    * @param string $plugin_id
-   * 
+   *
    * @return \Drupal\devel_generate\DevelGenerateBaseInterface
    *   A DevelGenerate plugin instance.
    */

@@ -5,7 +5,6 @@ namespace Drupal\devel_generate;
 class DevelGenerateFieldFactory {
 
   public function createInstance($fieldType) {
-
     $fieldType = ucfirst($fieldType);
     $class = "Drupal\devel_generate\DevelGenerateField$fieldType";
 
@@ -14,7 +13,6 @@ class DevelGenerateFieldFactory {
     }
 
     return new $class();
-
   }
 
 }

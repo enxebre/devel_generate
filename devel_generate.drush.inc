@@ -8,7 +8,7 @@
  * Implementation of hook_drush_command().
  */
 function devel_generate_drush_command() {
-
+  $items = array();
   $definitions = \Drupal::service('plugin.manager.develgenerate')->getDefinitions();
 
   foreach ($definitions as $id => $plugin_info) {
@@ -33,7 +33,6 @@ function devel_generate_drush_command() {
  * Command callback.
  */
 function drush_devel_generate() {
-
   //Array of "Callback arguments" and "command line args".
   $params = func_get_args();
 

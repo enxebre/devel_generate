@@ -2,7 +2,7 @@
 
 namespace Drupal\devel_generate;
 
-class DevelGenerateFieldFile extends DevelGenerateFieldBase{
+class DevelGenerateFieldFile extends DevelGenerateFieldBase {
 
   public function generateValues($object, $instance, $plugin_definition, $form_display_options) {
     static $file;
@@ -31,7 +31,7 @@ class DevelGenerateFieldFile extends DevelGenerateFieldBase{
     else {
       $object_field['target_id'] = $file->id();
       $object_field['display'] = $settings['display_default'];
-      $object_field['description'] = DevelGenerateBase::develCreateGreeking(10);
+      $object_field['description'] = DevelGenerateBase::createGreeking(10);
 
       return $object_field;
     }

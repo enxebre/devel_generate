@@ -81,7 +81,7 @@ class VocabularyDevelGenerate extends DevelGenerateBase {
    * Deletes all vocabularies.
    */
   protected function deleteVocabularies() {
-    foreach (entity_load_multiple('taxonomy_vocabulary') as $vid => $vocabulary) {
+    foreach (entity_load_multiple('taxonomy_vocabulary') as $vocabulary) {
       $vocabulary->delete();
     }
   }

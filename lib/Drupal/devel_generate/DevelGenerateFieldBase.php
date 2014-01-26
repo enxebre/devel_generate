@@ -6,7 +6,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\field\Field;
 use Drupal\Core\Field\FieldDefinitionInterface;
 
-abstract class DevelGenerateFieldBase implements DevelGenerateFieldBaseInterface{
+abstract class DevelGenerateFieldBase implements DevelGenerateFieldBaseInterface {
 
   /**
    * Implements Drupal\devel_generate\DevelGenerateFieldBaseInterface::generate().
@@ -29,7 +29,6 @@ abstract class DevelGenerateFieldBase implements DevelGenerateFieldBaseInterface
    * a random number of times and compile the results into a node array.
    */
   protected function generateMultiple($object, $instance, $plugin_definition, $form_display_options) {
-
     $object_field = array();
     $cardinality = $instance->getCardinality();
     switch ($cardinality) {
@@ -85,8 +84,10 @@ abstract class DevelGenerateFieldBase implements DevelGenerateFieldBaseInterface
       }
 
       for ($i = 0; $i <= $max; $i++) {
-
         $provider = $field_types[$field->type]['provider'];
+        if (!in_array($provider, array('file', 'image', 'taxonomy', 'number', 'text', 'options', 'email', 'link'))) {
+          return;
+        }
         $devel_generate_field_factory = new DevelGenerateFieldFactory();
         $devel_generate_field_object = $devel_generate_field_factory->createInstance($provider);
 

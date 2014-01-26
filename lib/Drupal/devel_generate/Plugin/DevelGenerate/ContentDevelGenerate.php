@@ -181,6 +181,11 @@ class ContentDevelGenerate extends DevelGenerateBase {
    * {@inheritdoc}
    */
   protected function generateElements(array $values) {
+    // Disable entity statistics for comments created as it tries to insert
+    // them twice.
+    // @see comment_entity_insert()
+    $comment_statistics = \Drupal::state()->get('comment.maintain_entity_statistics');
+    \Drupal::state()->set('comment.maintain_entity_statistics', FALSE);
     if ($values['num'] <= 50 && $values['max_comments'] <= 10) {
       if (!empty($values['kill'])) {
         $this->contentKill($values);
@@ -204,10 +209,13 @@ class ContentDevelGenerate extends DevelGenerateBase {
     else {
       //@todo devel_generate_batch_content($form_state).
     }
+    // Restore entity statistics.
+    // @see ContentDevelGenerate
+    \Drupal::state()->set('comment.maintain_entity_statistics', $comment_statistics);
+
   }
 
   public function handleDrushParams($args) {
-
     $add_language = drush_get_option('languages');
     if (!empty($add_language)) {
       $add_language = explode(',', str_replace(' ', '', $add_language));
@@ -262,9 +270,6 @@ class ContentDevelGenerate extends DevelGenerateBase {
 
   /**
    * Create one node. Used by both batch and non-batch code branches.
-   *
-   * @param $num
-   *   array of options obtained from devel_generate_content_form.
    */
   protected function develGenerateContentAddNode(&$results) {
     if (!isset($results['time_range'])) {
@@ -286,6 +291,7 @@ class ContentDevelGenerate extends DevelGenerateBase {
       'created' => REQUEST_TIME - mt_rand(0, $results['time_range']),
       'langcode' => $this->getLangcode($results),
     );
+
     if ($type->has_title) {
       // We should not use the random function if the value is not random
       if ($results['title_length'] < 2) {
@@ -312,9 +318,9 @@ class ContentDevelGenerate extends DevelGenerateBase {
     $node->save();
   }
 
-  /*
- * Determine language based on $results.
- */
+  /**
+   * Determine language based on $results.
+   */
   protected function getLangcode($results) {
     if (isset($results['add_language'])) {
       $langcodes = $results['add_language'];
@@ -327,7 +333,6 @@ class ContentDevelGenerate extends DevelGenerateBase {
   }
 
   protected function getUsers() {
-
     $users = array();
     $result = db_query_range("SELECT uid FROM {users}", 0, 50);
     foreach ($result as $record) {
