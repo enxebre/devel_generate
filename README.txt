@@ -1,53 +1,58 @@
-This module creates the "DevelGenerate" plugin type.
+README.txt
+==========
 
-All you need to do to provide a new instance for "DevelGenerate" plugin type
-is to create your class extending "DevelGenerateBase" and following the next steps.
+A module containing helper functions for Drupal developers and inquisitive admins.
+This module can print a log of all database queries for each page request at
+the bottom of each page. The summary includes how many times each query was
+executed on a page, and how long each query took.
 
-1 - Declaring your plugin with annotations:
+ It also offers
+ - a block for running custom PHP on a page
+ - a block for quickly accessing devel pages
+ - a block for masquerading as other users (useful for testing)
+ - reports memory usage at bottom of page
+ - A mail-system class which redirects outbound email to files
+ - more
 
-/**
- * Provides a ExampleDevelGenerate plugin.
- *
- * @DevelGenerate(
- *   id = "example",
- *   label = @Translation("example"),
- *   description = @Translation("Generate a given number of example elements. Optionally delete current example elements."),
- *   url = "example",
- *   permission = "administer example",
- *   settings = {
- *     "num" = 50,
- *     "kill" = FALSE,
- *     "another_property" = "default_value"
- *   },
- *   drushSettings = {
- *     "suffix" = "example",
- *     "alias" = "ex",
- *     "options" = {
- *        "kill" = "Delete existing examples",
- *        "another_drush_option" = "Description",
- *      },
- *     "args" = {
- *        "num" = "Number of examples to create"
- *     }
- *   }
- * )
- */
+ This module is safe to use on a production site. Just be sure to only grant
+ 'access development information' permission to developers.
 
-2 - Implement "settingsForm" method to create a form using the properties from annotations.
+Also a dpr() function is provided, which pretty prints arrays and strings.
+Useful during development. Many other nice functions like dpm(), dvm().
 
-3 - Implement "handleDrushParams" method. It should return an array of values.
+AJAX developers in particular ought to install FirePHP Core from
+http://www.firephp.org/ and put it in the devel directory.
+This happens automatically when you enable via Drush. You may also
+use a Drush command to download the library. If downloading by hand,
+your path to fb.php should look like libraries/FirePHPCore/lib/FirePHPCore/fb.php.
+You can use svn checkout http://firephp.googlecode.com/svn/trunk/trunk/Libraries/FirePHPCore.
+Then you can log php variables to the Firebug console. Is quite useful.
 
-4 - Implement "generateElements" method. You can write here your business logic
-using the array of values.
+Included in this package is also:
 
-Notes:
+- devel_node_access module which prints out the node_access records for a given node. Also offers hook_node_access_explain for all node access modules to implement. Handy.
+- devel_generate.module which bulk creates nodes, users, comment, terms for development.
 
-You can alter existing properties for every plugin implementing hook_devel_generate_info_alter.
+Some nifty Drush integration ships with devel and devel_generate. See `drush help` for details.
 
-DevelGenerateBaseInterface details base wrapping methods that most DevelGenerate implementations
-will want to directly inherit from Drupal\devel_generate\DevelGenerateBase.
+DEVEL GENERATE EXTENSIONS
+=========================
+Devel Images Provider [http://drupal.org/project/devel_image_provider] allows to configure external providers for images.
 
-DevelGenerateFieldBaseInterface details base wrapping methods that most class implementations
-for supporting new field types will want to directly inherit from Drupal\devel_generate\DevelGenerateFieldBase.
-So to give support for a new field type should be enough to create a class called
-"DevelGenerateFieldNewfieldtype" extending DevelGenerateFieldBase and to implement "generateValues" method.
+COMPATIBILITY NOTES
+==================
+- Modules that use AHAH may have incompatibility with the query log and other
+  footer info. Consider setting $GLOBALS['devel_shutdown'] = FALSE if you run into
+  any issues.
+
+DRUSH UNIT TEST
+==================
+See develDrushTest.php for an example of unit testing of the Drush integration.
+This uses Drush's own test framework, based on PHPUnit. To run the tests, use
+run-tests-drush.sh. You may pass in any arguments that are valid for `phpunit`.
+
+AUTHOR/MAINTAINER
+======================
+- Moshe Weitzman <weitzman at tejasa DOT com> http://www.acquia.com
+- Hans Salvisberg <drupal at salvisberg DOT com>
+- Pedro Cambra <https://drupal.org/user/122101/contact> http://www.ymbra.com/

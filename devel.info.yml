@@ -1,0 +1,8 @@
+name: Devel
+type: module
+description: 'Various blocks, pages, and functions for developers.'
+package: Development
+core: 8.x
+configure: admin/config/development/devel
+tags:
+ - developer
