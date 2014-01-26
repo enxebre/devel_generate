@@ -37,7 +37,7 @@ class DevelGenerateManagerTest extends UnitTestCase {
    */
   public function testCreateInstance() {
     $language = new Language(array('id' => 'en'));
-    $language_manager = $this->getMock('Drupal\Core\Language\LanguageManager');
+    $language_manager = $this->getMock('Drupal\Core\Language\LanguageManagerInterface');
     $language_manager->expects($this->once())
       ->method('getLanguage')
       ->with(Language::TYPE_INTERFACE)
