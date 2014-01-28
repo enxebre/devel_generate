@@ -187,27 +187,10 @@ class ContentDevelGenerate extends DevelGenerateBase {
     $comment_statistics = \Drupal::state()->get('comment.maintain_entity_statistics');
     \Drupal::state()->set('comment.maintain_entity_statistics', FALSE);
     if ($values['num'] <= 50 && $values['max_comments'] <= 10) {
-      if (!empty($values['kill'])) {
-        $this->contentKill($values);
-      }
-
-      if (count($values['node_types'])) {
-        // Generate nodes.
-        $this->develGenerateContentPreNode($values);
-        $start = time();
-        for ($i = 1; $i <= $values['num']; $i++) {
-          $this->develGenerateContentAddNode($values);
-          if (function_exists('drush_log') && $i % drush_get_option('feedback', 1000) == 0) {
-            $now = time();
-            drush_log(dt('Completed !feedback nodes (!rate nodes/min)', array('!feedback' => drush_get_option('feedback', 1000), '!rate' => (drush_get_option('feedback', 1000)*60)/($now-$start))), 'ok');
-            $start = $now;
-          }
-        }
-      }
-      $this->setMessage(\Drupal::translation()->formatPlural($values['num'], '1 node created.', 'Finished creating @count nodes'));
+      $this->generateContent($values);
     }
     else {
-      //@todo devel_generate_batch_content($form_state).
+      $this->generateBatchContent($values);
     }
     // Restore entity statistics.
     // @see ContentDevelGenerate
@@ -215,6 +198,78 @@ class ContentDevelGenerate extends DevelGenerateBase {
 
   }
 
+  /**
+   * Method responsible for creating content when
+   * the number of elements is less than 50.
+   */
+  private function generateContent($values) {
+
+    if (!empty($values['kill'])) {
+      $this->contentKill($values);
+    }
+
+    if (count($values['node_types'])) {
+      // Generate nodes.
+      $this->develGenerateContentPreNode($values);
+      $start = time();
+      for ($i = 1; $i <= $values['num']; $i++) {
+        $this->develGenerateContentAddNode($values);
+        if (function_exists('drush_log') && $i % drush_get_option('feedback', 1000) == 0) {
+          $now = time();
+          drush_log(dt('Completed !feedback nodes (!rate nodes/min)', array('!feedback' => drush_get_option('feedback', 1000), '!rate' => (drush_get_option('feedback', 1000)*60)/($now-$start))), 'ok');
+          $start = $now;
+        }
+      }
+    }
+    $this->setMessage(\Drupal::translation()->formatPlural($values['num'], '1 node created.', 'Finished creating @count nodes'));
+  }
+
+  /**
+   * Method responsible for creating content when
+   * the number of elements is greater than 50.
+   */
+  private function generateBatchContent($values) {
+    // Setup the batch operations and save the variables.
+    $operations[] = array('devel_generate_operation', array($this, 'batchContentPreNode', $values));
+
+    // add the kill operation
+    if ($values['kill']) {
+      $operations[] = array('devel_generate_operation', array($this, 'batchContentKill', $values));
+    }
+
+    // add the operations to create the nodes
+    for ($num = 0; $num < $values['num']; $num ++) {
+      $operations[] = array('devel_generate_operation', array($this, 'batchContentAddNode', $values));
+    }
+
+    // start the batch
+    $batch = array(
+      'title' => t('Generating Content'),
+      'operations' => $operations,
+      'finished' => 'devel_generate_batch_finished',
+      'file' => drupal_get_path('module', 'devel_generate') . '/devel_generate.batch.inc',
+    );
+    batch_set($batch);
+  }
+
+  public function batchContentPreNode($vars, &$context) {
+    $context['results'] = $vars;
+    $context['results']['num'] = 0;
+    $this->develGenerateContentPreNode($context['results']);
+  }
+
+  public function batchContentAddNode($vars, &$context) {
+    $this->develGenerateContentAddNode($context['results']);
+    $context['results']['num']++;
+  }
+
+  public function batchContentKill($vars, &$context) {
+    $this->contentKill($context['results']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function handleDrushParams($args) {
     $add_language = drush_get_option('languages');
     if (!empty($add_language)) {
@@ -261,6 +316,10 @@ class ContentDevelGenerate extends DevelGenerateBase {
     }
   }
 
+  /**
+   * Return the same array passed as parameter
+   * but with an array of uids for the key 'users'.
+   */
   protected function develGenerateContentPreNode(&$results) {
     // Get user id.
     $users = $this->getUsers();
@@ -332,6 +391,9 @@ class ContentDevelGenerate extends DevelGenerateBase {
     return $langcode == 'en' ? Language::LANGCODE_NOT_SPECIFIED : $langcode;
   }
 
+  /**
+   * Retrive 50 uids from the database.
+   */
   protected function getUsers() {
     $users = array();
     $result = db_query_range("SELECT uid FROM {users}", 0, 50);
