@@ -39,7 +39,7 @@ class DevelGenerateManagerTest extends UnitTestCase {
     $language = new Language(array('id' => 'en'));
     $language_manager = $this->getMock('Drupal\Core\Language\LanguageManagerInterface');
     $language_manager->expects($this->once())
-      ->method('getLanguage')
+      ->method('getCurrentLanguage')
       ->with(Language::TYPE_INTERFACE)
       ->will($this->returnValue($language));
     $namespaces = new \ArrayObject(array('Drupal\devel_generate_example' => realpath(dirname(__FILE__) . '/../../../modules/devel_generate_example/lib')));
