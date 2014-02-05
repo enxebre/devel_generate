@@ -113,4 +113,5 @@ abstract class DevelGenerateFieldBase implements DevelGenerateFieldBaseInterface
       $object->{$field_name} = $object_field;
     }
   }
+
 }

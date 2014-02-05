@@ -6,9 +6,6 @@ define('DEVEL_GENERATE_IMAGE_MAX', 5);
 
 class DevelGenerateFieldImage extends DevelGenerateFieldBase {
 
-  public function __construct() {
-
-  }
   function generateValues($object, $instance, $plugin_definition, $form_display_options) {
     $object_field = array();
     static $images = array();
