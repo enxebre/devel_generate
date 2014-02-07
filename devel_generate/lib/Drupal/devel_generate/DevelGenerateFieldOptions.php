@@ -2,6 +2,8 @@
 
 namespace Drupal\devel_generate;
 
+use Drupal\field\Field;
+
 class DevelGenerateFieldOptions extends DevelGenerateFieldBase {
 
   public function generateValues($object, $instance, $plugin_definition, $form_display_options) {
