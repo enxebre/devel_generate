@@ -8,6 +8,7 @@
 namespace Drupal\devel_generate_example\Plugin\DevelGenerate;
 
 use Drupal\devel_generate\DevelGenerateBase;
+use Drupal\devel_generate\DevelGenerateFieldBase;
 
 /**
  * Provides a ExampleDevelGenerate plugin.
@@ -64,6 +65,28 @@ class ExampleDevelGenerate extends DevelGenerateBase {
     if ($kill) {
         $this->setMessage(t('Old examples have been deleted.'));
     }
+
+    //Creating user in order to demonstrate
+    // how to override default business login generation.
+    $edit = array(
+      'uid'     => NULL,
+      'name'    => 'example_devel_generate',
+      'pass'    => '',
+      'mail'    => 'example_devel_generate@example.com',
+      'status'  => 1,
+      'created' => REQUEST_TIME,
+      'roles' => '',
+      'devel_generate' => TRUE // A flag to let hook_user_* know that this is a generated user.
+    );
+
+    $account = user_load_by_name('example_devel_generate');
+    if (!$account) {
+      $account = entity_create('user', $edit);
+    }
+
+    // Populate all core fields on behalf of field.module
+    DevelGenerateFieldBase::generateFields($account, 'user', 'user', 'register', 'devel_generate_example');
+    $account->save();
 
     $this->setMessage(t('!num_examples created.', array('!num_examples' => \Drupal::translation()->formatPlural($num, '1 example', '@count examples'))));
   }
