@@ -15,7 +15,7 @@ class DevelGenerateFieldFactory {
       }
     }
 
-    return new $class();
+    return new $class;
   }
 
 }

@@ -169,7 +169,7 @@ class TermDevelGenerate extends DevelGenerateBase {
       $term = entity_create('taxonomy_term', $values);
 
       // Populate all core fields on behalf of field.module
-      DevelGenerateFieldBase::generateFields($term, 'taxonomy_term', $values['vocabulary_machine_name'], 'devel_generate');
+      DevelGenerateFieldBase::generateFields($term, 'taxonomy_term', $values['vocabulary_machine_name']);
 
       if ($status = $term->save()) {
         $max += 1;

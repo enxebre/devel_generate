@@ -52,7 +52,7 @@ abstract class DevelGenerateFieldBase implements DevelGenerateFieldBaseInterface
    * Enrich the $object that is about to be saved with arbitrary
    * information in each of its fields.
    */
-  public static function generateFields(EntityInterface &$object, $entity_type, $bundle_name, $form_mode = 'default', $namespace) {
+  public static function generateFields(EntityInterface &$object, $entity_type, $bundle_name, $form_mode = 'default', $namespace = 'devel_generate') {
     $instances = Field::fieldInfo()->getBundleInstances($entity_type, $bundle_name);
     $field_types = \Drupal::service('plugin.manager.field.field_type')->getDefinitions();
     $skips = function_exists('drush_get_option') ? drush_get_option('skip-fields', '') : @$_REQUEST['skip-fields'];

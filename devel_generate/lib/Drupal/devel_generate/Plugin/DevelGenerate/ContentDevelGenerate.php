@@ -394,7 +394,7 @@ class ContentDevelGenerate extends DevelGenerateBase {
     $node->devel_generate = $results;
 
     // Populate all core fields on behalf of field.module
-    DevelGenerateFieldBase::generateFields($node, 'node', $node->bundle(), 'devel_generate');
+    DevelGenerateFieldBase::generateFields($node, 'node', $node->bundle());
 
     // See devel_generate_node_insert() for actions that happen before and after
     // this save.
