@@ -51,7 +51,7 @@ class DevelGenerateRoutes implements ContainerInjectionInterface {
           '_plugin_id' => $id,
         ),
         array(
-          '_permission' => 'TRUE',
+          '_permission' => $plugin['permission'],
         )
       );
     }
