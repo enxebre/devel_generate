@@ -60,7 +60,7 @@ function devel_generate_node_insert(EntityInterface $node) {
     $results = $node->devel_generate;
 
     if (!empty($results['max_comments'])) {
-      $instances = Field::fieldInfo()->getBundleInstances($node->entityType(), $node->bundle());
+      $instances = Field::fieldInfo()->getBundleInstances($node->getEntityTypeId(), $node->bundle());
       foreach ($instances as $instance) {
         $field = $instance->getField();
         if ($field->getType() == 'comment') {
