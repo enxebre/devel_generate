@@ -41,7 +41,6 @@ use Drupal\devel_generate\DevelGenerateFieldBase;
 class UserDevelGenerate extends DevelGenerateBase {
 
   public function settingsForm(array $form, array &$form_state) {
-
     $form['num'] = array(
       '#type' => 'textfield',
       '#title' => t('How many users would you like to generate?'),

@@ -7,8 +7,9 @@
 
 namespace Drupal\devel_generate\Plugin\DevelGenerate;
 
-use Drupal\devel_generate\DevelGenerateBase;
 use Drupal\Core\Language\Language;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\devel_generate\DevelGenerateBase;
 use Drupal\devel_generate\DevelGenerateFieldBase;
 use Drupal\field\FieldInfo;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -46,29 +47,37 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   }
  * )
  */
-class ContentDevelGenerate extends DevelGenerateBase {
+class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactoryPluginInterface {
 
   /**
-   * Constructs a GenerateContent object.
+   * The field info service.
+   *
+   * @var \Drupal\field\FieldInfo
+   */
+  protected $fieldInfo;
+
+  /**
+   * {@inheritdoc}
    *
    * @param \Drupal\field\FieldInfo $field_info
    *   Field Info service.
    */
-  public function __construct(FieldInfo $field_info) {
+  public function __construct(array $configuration, $plugin_id, array $plugin_definition, FieldInfo $field_info) {
     $this->fieldInfo = $field_info;
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, array $plugin_definition) {
     return new static(
+      $configuration, $plugin_id, $plugin_definition,
       $container->get('field.info')
     );
   }
 
   public function settingsForm(array $form, array &$form_state) {
-
     $options = array();
 
     if (\Drupal::moduleHandler()->moduleExists('content')) {
@@ -197,7 +206,6 @@ class ContentDevelGenerate extends DevelGenerateBase {
     );
     $form['#redirect'] = FALSE;
 
-
     return $form;
   }
 
@@ -219,7 +227,6 @@ class ContentDevelGenerate extends DevelGenerateBase {
     // Restore entity statistics.
     // @see ContentDevelGenerate
     \Drupal::state()->set('comment.maintain_entity_statistics', $comment_statistics);
-
   }
 
   /**
@@ -227,7 +234,6 @@ class ContentDevelGenerate extends DevelGenerateBase {
    * the number of elements is less than 50.
    */
   private function generateContent($values) {
-
     if (!empty($values['kill'])) {
       $this->contentKill($values);
     }

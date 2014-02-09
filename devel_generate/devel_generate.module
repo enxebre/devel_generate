@@ -7,18 +7,17 @@ use Drupal\devel_generate\DevelGenerateFieldBase;
 use Drupal\field\Field;
 
 /**
- * Implements hook_menu().
+ * Implements hook_menu_link_defaults().
  */
-function devel_generate_menu() {
-
+function devel_generate_menu_link_defaults() {
   $items = array();
 
   $devel_generate_plugins = $devel_generate_manager = \Drupal::service('plugin.manager.develgenerate')->getDefinitions();
   foreach ($devel_generate_plugins as $id => $plugin) {
     $label = $plugin['label'];
-    $url = $plugin['url'];
-    $items["admin/config/development/generate/$url"] = array(
-      'title' => "Generate $label",
+    $items["devel_generate.$id"] = array(
+      'link_title' => "Generate $label",
+      'parent' => 'system.admin.config.development',
       'description' => $plugin['description'],
       'route_name' => "devel_generate.$id",
     );
@@ -28,7 +27,6 @@ function devel_generate_menu() {
 }
 
 function devel_generate_permission() {
-
   $permissions = array();
 
   $devel_generate_plugins = $devel_generate_manager = \Drupal::service('plugin.manager.develgenerate')->getDefinitions();
@@ -70,7 +68,6 @@ function devel_generate_node_insert(EntityInterface $node) {
         }
       }
     }
-
 
     // Add an url alias. Cannot happen before save because we don't know the nid.
     if (!empty($results['add_alias'])) {
@@ -122,7 +119,6 @@ function devel_generate_add_comments(EntityInterface $node, $field, $users, $max
       $comment->save();
     }
   }
-
 }
 
 

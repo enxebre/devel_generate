@@ -40,7 +40,6 @@ use Drupal\Core\Language\Language;
 class VocabularyDevelGenerate extends DevelGenerateBase {
 
   public function settingsForm(array $form, array &$form_state) {
-
     $form['num'] = array(
       '#type' => 'textfield',
       '#title' => t('Number of vocabularies?'),

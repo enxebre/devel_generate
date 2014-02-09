@@ -43,7 +43,6 @@ use Drupal\devel_generate\DevelGenerateFieldBase;
 class TermDevelGenerate extends DevelGenerateBase {
 
   public function settingsForm(array $form, array &$form_state) {
-
     $options = array();
     foreach (entity_load_multiple('taxonomy_vocabulary') as $vid => $vocab) {
       $options[$vid] = $vocab->vid;

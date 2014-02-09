@@ -44,7 +44,6 @@ use Drupal\devel_generate\DevelGenerateBase;
 class MenuDevelGenerate extends DevelGenerateBase {
 
   public function settingsForm(array $form, array &$form_state) {
-
     $menu_enabled = \Drupal::moduleHandler()->moduleExists('menu');
     if ($menu_enabled) {
       $menus = array('__new-menu__' => t('Create new menu(s)')) + menu_get_menus();
