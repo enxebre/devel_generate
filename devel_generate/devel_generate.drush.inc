@@ -16,7 +16,7 @@ function devel_generate_drush_command() {
     ),
     'description' => 'Create users.',
     'arguments' => array(
-      'number_users' => 'Number of users to generate.',
+      'num' => 'Number of users to generate.',
     ),
     'options' => array(
       'kill' => 'Delete all users before generating new ones.',
@@ -33,7 +33,7 @@ function devel_generate_drush_command() {
     'description' => 'Create terms in specified vocabulary.',
     'arguments' => array(
       'machine_name' => 'Vocabulary machine name into which new terms will be inserted.',
-      'number_terms' => 'Number of terms to insert. Defaults to 10.',
+      'num' => 'Number of terms to insert. Defaults to 10.',
     ),
     'options' => array(
       'kill' => 'Delete all terms in specified vocabulary before generating.',
@@ -50,7 +50,7 @@ function devel_generate_drush_command() {
     ),
     'description' => 'Create vocabularies.',
     'arguments' => array(
-      'num_vocabs' => 'Number of vocabularies to create. Defaults to 1.',
+      'num' => 'Number of vocabularies to create. Defaults to 1.',
     ),
     'options' => array(
       'kill' => 'Delete all vocabularies before generating.',
@@ -66,8 +66,8 @@ function devel_generate_drush_command() {
     'description' => 'Create content.',
     'drupal dependencies' => array('devel_generate'),
     'arguments' => array(
-      'number_nodes' => 'Number of nodes to generate.',
-      'maximum_comments' => 'Maximum number of comments to generate.',
+      'num' => 'Number of nodes to generate.',
+      'max_comments' => 'Maximum number of comments to generate.',
     ),
     'options' => array(
       'kill' => 'Delete all content before generating new content.',
@@ -99,7 +99,6 @@ function devel_generate_drush_command() {
   );
   return $items;
 }
-
 
 /**
  * Command callback. Generate a number of users.
