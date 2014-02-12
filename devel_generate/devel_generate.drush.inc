@@ -104,7 +104,7 @@ function devel_generate_drush_command() {
 /**
  * Command callback. Generate a number of users.
  */
-function drush_devel_generate_users() {
+function drush_devel_generate() {
   //Array of "Callback arguments" and "command line args".
   $params = func_get_args();
 
