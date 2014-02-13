@@ -23,17 +23,6 @@ use Drupal\Core\Language\Language;
  *     "num" = 1,
  *     "title_length" = 12,
  *     "kill" = FALSE
- *   },
- *   drushSettings = {
- *     "suffix" = "vocabs",
- *     "alias" = "v",
- *     "options" = {
- *        "kill" = "Delete existing vocabularies.",
- *        "pipe" = "Returns the list of generated vocabularies, one per line."
- *      },
- *     "args" = {
- *        "num" = "Number of vocabularies to create"
- *     }
  *   }
  * )
  */

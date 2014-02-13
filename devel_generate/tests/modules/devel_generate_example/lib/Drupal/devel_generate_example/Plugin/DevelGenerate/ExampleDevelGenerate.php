@@ -22,16 +22,6 @@ use Drupal\devel_generate\DevelGenerateFieldBase;
  *   settings = {
  *     "num" = 50,
  *     "kill" = FALSE
- *   },
- *   drushSettings = {
- *     "suffix" = "examples",
- *     "alias" = "exm",
- *     "options" = {
- *        "kill" = "Delete existing examples"
- *      },
- *     "args" = {
- *        "num" = "Number of examples to create"
- *     }
  *   }
  * )
  */

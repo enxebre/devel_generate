@@ -18,17 +18,6 @@ is to create your class extending "DevelGenerateBase" and following the next ste
  *     "num" = 50,
  *     "kill" = FALSE,
  *     "another_property" = "default_value"
- *   },
- *   drushSettings = {
- *     "suffix" = "example",
- *     "alias" = "ex",
- *     "options" = {
- *        "kill" = "Delete existing examples",
- *        "another_drush_option" = "Description",
- *      },
- *     "args" = {
- *        "num" = "Number of examples to create"
- *     }
  *   }
  * )
  */

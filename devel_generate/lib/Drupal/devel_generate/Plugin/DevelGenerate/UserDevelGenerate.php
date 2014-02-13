@@ -23,18 +23,6 @@ use Drupal\devel_generate\DevelGenerateFieldBase;
  *     "num" = 50,
  *     "kill" = FALSE,
  *     "pass" = ""
- *   },
- *   drushSettings = {
- *     "suffix" = "users",
- *     "alias" = "u",
- *     "options" = {
- *        "kill" = "Delete existing users",
- *        "pass" = "Set a predifined password",
- *        "roles" = "Roles for new users"
- *      },
- *     "args" = {
- *        "num" = "Number of users to create"
- *     }
  *   }
  * )
  */

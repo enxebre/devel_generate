@@ -24,19 +24,6 @@ use Drupal\devel_generate\DevelGenerateFieldBase;
  *     "num" = 10,
  *     "title_length" = 12,
  *     "kill" = FALSE,
- *   },
- *   drushSettings = {
- *     "suffix" = "terms",
- *     "alias" = "t",
- *     "options" = {
- *        "kill" = "Delete existing users",
- *        "feedback" = "An integer representing interval for insertion rate logging. Defaults to 1000",
- *        "pipe" = "Returns the list of generated terms, one per line."
- *      },
- *     "args" = {
- *        "machine_name" = "Vocabulary machine name into which new terms will be inserted.",
- *        "num" = "Number of terms to insert. Defaults to 10."
- *     }
  *   }
  * )
  */

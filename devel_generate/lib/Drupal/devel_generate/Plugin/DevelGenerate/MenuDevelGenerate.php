@@ -24,21 +24,7 @@ use Drupal\devel_generate\DevelGenerateBase;
  *     "title_length" = 12,
  *     "max_width" = 6,
  *     "kill" = FALSE,
- *   },
- *   drushSettings = {
- *     "suffix" = "menu",
- *     "alias" = "m",
- *     "options" = {
- *        "kill" = "Delete all previously generated menus and links before generating new menus and links.",
- *        "pipe" = "Returns the list of generated menus, one per line."
- *      },
- *      "args" = {
- *         "number_menus" = "Number of menus to generate. Defaults to 2.",
- *         "number_links" = "Number of links to generate. Defaults to 50.",
- *         "max_depth" = "Max link depth. Defaults to 3",
- *         "max_width" = "Max width of first level of links. Defaults to 8."
- *       }
- *    }
+ *   }
  * )
  */
 class MenuDevelGenerate extends DevelGenerateBase {
