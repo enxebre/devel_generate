@@ -126,7 +126,7 @@ class UserDevelGenerate extends DevelGenerateBase {
     $this->setMessage(t('!num_users created.', array('!num_users' => format_plural($num, '1 user', '@count users'))));
   }
 
-  public function handleDrushParams($args) {
+  public function validateDrushParams($args) {
     $values = array(
       'num' => array_shift($args),
       'roles' => drush_get_option('roles') ? explode(',', drush_get_option('roles')) : array(),

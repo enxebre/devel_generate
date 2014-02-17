@@ -142,7 +142,7 @@ class MenuDevelGenerate extends DevelGenerateBase {
     $this->setMessage(t('Created @count new menu links.', array('@count' => count($new_links))));
   }
 
-  public function handleDrushParams($args) {
+  public function validateDrushParams($args) {
 
     $values = array(
       'num_menus' => array_shift($args),

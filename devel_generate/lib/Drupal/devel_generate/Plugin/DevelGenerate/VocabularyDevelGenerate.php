@@ -99,7 +99,7 @@ class VocabularyDevelGenerate extends DevelGenerateBase {
     return $vocs;
   }
 
-  public function handleDrushParams($args) {
+  public function validateDrushParams($args) {
     $values = array(
       'num' => array_shift($args),
       'kill' => drush_get_option('kill'),

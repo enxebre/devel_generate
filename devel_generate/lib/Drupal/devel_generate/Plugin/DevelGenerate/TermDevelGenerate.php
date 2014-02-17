@@ -180,7 +180,7 @@ class TermDevelGenerate extends DevelGenerateBase {
     return $terms;
   }
 
-  public function handleDrushParams($args) {
+  public function validateDrushParams($args) {
 
     $vname = array_shift($args);
     $values = array(
