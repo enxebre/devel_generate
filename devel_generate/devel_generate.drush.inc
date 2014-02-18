@@ -158,31 +158,32 @@ function drush_devel_generate_generate_menus_validate() {
 function _drush_plugin_validate($params) {
 
   $instance_and_values = &drupal_static('drush_devel_generate_generate_validate');
+  //Getting plugin_id and leaving the command line args
+  $plugin_id = array_shift($params);
 
-  if (!isset($instance_and_values)) {
-    //Getting plugin_id and leaving the command line args
-    $plugin_id = array_shift($params);
+  if (!isset($instance_and_values[$plugin_id])) {
 
     $devel_generate_manager = \Drupal::service('plugin.manager.develgenerate');
     $instance = $devel_generate_manager->createInstance($plugin_id, array());
 
     //Plugin instance suit params in order to fit for generateElements
     $values = $instance->validateDrushParams($params);
-    $instance_and_values['instance'] = $instance;
-    $instance_and_values['values'] = $values;
+    $instance_and_values[$plugin_id]['instance'] = $instance;
+    $instance_and_values[$plugin_id]['values'] = $values;
   }
 
-  return $instance_and_values;
+  return $instance_and_values[$plugin_id];
 }
 
 /**
  * Command callback. Generate a number of elements.
  */
 function drush_devel_generate() {
-
+  $params = func_get_args();
+  $plugin_id = array_shift($params);
   $instance_and_values = drupal_static('drush_devel_generate_generate_validate');
-  $plugin_instance = $instance_and_values['instance'];
-  $values = $instance_and_values['values'];
+  $plugin_instance = $instance_and_values[$plugin_id]['instance'];
+  $values = $instance_and_values[$plugin_id]['values'];
   $plugin_instance->generate($values);
 
 }
