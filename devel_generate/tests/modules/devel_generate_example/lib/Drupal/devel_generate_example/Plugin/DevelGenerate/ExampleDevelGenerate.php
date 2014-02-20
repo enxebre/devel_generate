@@ -81,7 +81,7 @@ class ExampleDevelGenerate extends DevelGenerateBase {
     $this->setMessage(t('!num_examples created.', array('!num_examples' => \Drupal::translation()->formatPlural($num, '1 example', '@count examples'))));
   }
 
-  public function handleDrushParams($args) {
+  public function validateDrushParams($args) {
     $values = array(
       'num' => array_shift($args),
       'kill' => drush_get_option('kill'),
